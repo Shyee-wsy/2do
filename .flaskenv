@@ -1,4 +1,4 @@
-FLASK_APP = app
+FLASK_APP = backend
 
 # development or production
 FLASK_ENV = development
