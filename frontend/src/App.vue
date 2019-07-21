@@ -1,60 +1,82 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <h1>{{ msg }}</h1>
-    <h2>Essential Links</h2>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank">Twitter</a></li>
-    </ul>
-    <h2>Ecosystem</h2>
-    <ul>
-      <li><a href="http://router.vuejs.org/" target="_blank">vue-router</a></li>
-      <li><a href="http://vuex.vuejs.org/" target="_blank">vuex</a></li>
-      <li><a href="http://vue-loader.vuejs.org/" target="_blank">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank">awesome-vue</a></li>
-    </ul>
+    <div id="list">
+      <ul>
+        <li v-for="item in lists" :key="item.id">{{ item.name }}</li>
+        <li><input placeholder="+ 新建清单"></li>
+      </ul>
+    </div>
+    <Item></Item>
   </div>
 </template>
 
 <script>
+import Item from './Item'
 export default {
   name: 'app',
+  components: {
+    Item
+  },
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      lists:[
+        {id: 0, name: 'Todo'},
+        { id: 1, name: 'List1' },
+        { id: 2, name: 'List2' },
+        { id: 3, name: 'List3' },
+        { id: 4, name: '我的计划' }
+      ],
+      listName: true
     }
   }
 }
 </script>
 
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+#app{
+  width: 80vw;
+  height: 100vh;
+  margin: 0 auto;
 }
-
-h1, h2 {
-  font-weight: normal;
+#list{
+  float: left;
+  width: 20%;
+  height: 100%;
+  border-left: 1px solid #7e7e81;
+  border-right: 1px solid #7e7e81;
+  background-color: #f4f4f4;
 }
-
-ul {
+*{
+  box-sizing: border-box;
+}
+body{
+  margin: 0;
+}
+ul li{
+  border-bottom: 1px solid #7e7e81;
   list-style-type: none;
-  padding: 0;
+  height: 50px;
+  padding: 20px;
+  font-size: 20px;
 }
-
-li {
-  display: inline-block;
-  margin: 0 10px;
+input{
+  border: none;
+  padding: 5px;
+  background-color: inherit;
+  outline: none;
 }
-
-a {
-  color: #42b983;
+#list li:hover{
+  font-weight: bold;
 }
+#list li:nth-child(1){
+  margin-bottom: 20px;
+}
+#item ul li{
+  margin-right: 30px;
+  font-size: 16px;
+  /*text-decoration: line-through;*/
+}
+/*.finish:checked{*/
+  /*text-decoration: line-through;*/
+/*}*/
 </style>
