@@ -20,7 +20,7 @@ export default {
           {id: 1, content: '洗碗'},
           {id: 2, content: '浇花'}
         ],
-        finished: 'false',
+        finished: false,
       }
     },
   props:{

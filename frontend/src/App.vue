@@ -76,7 +76,7 @@ input{
   font-size: 16px;
   /*text-decoration: line-through;*/
 }
-/*.finish:checked{*/
-  /*text-decoration: line-through;*/
-/*}*/
+li input {
+  font-size: 16px;
+}
 </style>
