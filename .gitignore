@@ -11,6 +11,5 @@ yarn-error.log
 *.njsproj
 *.sln
 
-.env
 .venv
 __pycache__
