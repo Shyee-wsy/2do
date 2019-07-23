@@ -2,11 +2,11 @@
   <div id="item">
     <blockquote>Todo</blockquote>
     <ul>
-      <li><input refs="input" placeholder="接下来做什么？" autofocus="true" @keyup.13="new_todo()" v-model="text"></li>
+      <li><input placeholder="接下来做什么？" autofocus="true" @keyup.13="new_todo()" v-model="text" class="new"></li>
       <li v-for="(item,index) in todoList" :class="{finished: item.done}">
         <input type="checkbox" id="item.id" v-model="item.done">
         <label for="item.id"> {{item.text}}</label>
-        <button class="delete" @click="">X</button>
+        <button class="deleteTodo" @click="deleteTodo(item.index)">X</button>
       </li>
     </ul>
   </div>
@@ -29,7 +29,10 @@ export default {
   methods: {
     new_todo: function(){
       this.todoList.push({id: 3, text: this.text, done: false});
-      // this.$refs.input. = '';
+      this.text = '';
+    },
+    deleteTodo: function(index){
+      this.todoList.splice(index, 1);
     }
   }
 }
@@ -52,7 +55,7 @@ blockquote{
 .finished{
   text-decoration: line-through;
 }
-.delete{
+.deleteTodo{
   width: 20px;
   height: 20px;
   border: none;
@@ -60,8 +63,11 @@ blockquote{
   background-color: inherit;
   color: rgba(205, 30, 20, 0.99);
   font-weight: bold;
-  position: relative;
-  left: 85%;
+  position: absolute;
+  right: 5%;
   font-size: 16px;
+}
+.new{
+  width: 90%;
 }
 </style>

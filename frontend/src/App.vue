@@ -2,8 +2,9 @@
   <div id="app">
     <div id="list">
       <ul>
-        <li v-for="item in lists" :key="item.id">{{ item.name }}</li>
-        <li><input placeholder="+ 新建清单"></li>
+        <li>Todo</li>
+        <li v-for="(item, index) in lists" :key="item.id"><button class="deleteList" @click="deleteList(item.index)">X</button>{{ item.name }}</li>
+        <li><input placeholder="+ 新建清单" @keyup.13="newList(text)" v-model="text"></li>
       </ul>
     </div>
     <Item></Item>
@@ -20,13 +21,23 @@ export default {
   data () {
     return {
       lists:[
-        {id: 0, name: 'Todo'},
+        {id: 0, name: '计划'},
         { id: 1, name: 'List1' },
         { id: 2, name: 'List2' },
         { id: 3, name: 'List3' },
         { id: 4, name: '我的计划' }
       ],
-      listName: true
+      listName: true,
+      text: ''
+    }
+  },
+  methods: {
+    deleteList:function(index){
+      this.lists.splice(index, 1);
+    },
+    newList:function(text){
+      this.lists.push({id: 5, name: text});
+      this.text='';
     }
   }
 }
@@ -34,7 +45,7 @@ export default {
 
 <style>
 #app{
-  width: 80vw;
+  width: 100vw;
   height: 100vh;
   margin: 0 auto;
 }
@@ -69,7 +80,7 @@ input{
   font-weight: bold;
 }
 #list li:nth-child(1){
-  margin-bottom: 20px;
+  margin-left: 20px;
 }
 #item ul li{
   margin-right: 30px;
@@ -78,5 +89,12 @@ input{
 }
 li input {
   font-size: 16px;
+}
+.deleteList{
+  background-color: inherit;
+  border: none;
+  color: rgba(205, 30, 20, 0.99);
+  outline: none;
+  margin-right: 2%;
 }
 </style>
