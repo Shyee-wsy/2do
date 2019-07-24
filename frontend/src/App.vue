@@ -13,6 +13,8 @@
 
 <script>
 import Item from './Item'
+import axios from 'axios';
+
 export default {
   name: 'app',
   components: {
@@ -38,7 +40,13 @@ export default {
     newList:function(text){
       this.lists.push({id: 5, name: text});
       this.text='';
-    }
+    },
+  },
+  mounted(){
+    axios
+      .get('http://192.168.188.45:5000/get_todo')
+      .then(response => (console.log(response)))
+      .catch(error => console.log(error))
   }
 }
 </script>
