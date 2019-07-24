@@ -42,8 +42,11 @@ def get_forge_data():
 
 # custom command
 @app.cli.command("init_db")
-@click.option("--forge", is_flag=True)
+@click.option("--forge", is_flag=True, help="Generate some forge data.")
 def init_db(forge):
+    """
+    初始化数据库（包括生成初始数据）
+    """
     db.drop_all()
     db.create_all()
 
@@ -56,7 +59,7 @@ def init_db(forge):
         db.session.add_all(forge_data)
     db.session.commit()
 
-    click.echo("Initialized database success!")
+    click.echo("\nInitialized database success!")
 
 
 # views

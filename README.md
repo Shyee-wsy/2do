@@ -35,12 +35,11 @@
 # Run!!!
 
 * *运行此项目的一些前置与命令*:
-    * 进入后端项目: `cd backend`
-        * 安装依赖: `pipenv install`
-        * 生成数据库数据（forge 参数用来生成测试数据）: `pipenv run flask init_db [--forge]`
     * 进入前端项目: `cd frontend`
         * 安装依赖: `npm/yarn install`
         * 构建前端项目: `npm/yarn run build`
     * 进入后端项目: `cd backend`
-        * 启动 Web 服务器: `python -m flask run [--host] [--post]`
+        * 安装依赖: `pipenv install`
+        * 生成数据库数据（forge 参数用来生成测试数据）: `pipenv run flask init_db [--forge]`
+        * 启动 Web 服务器: `pipenv run python -m flask run [--host] [--post]`
     * 访问: 在浏览器地址栏键入 `127.0.0.1:5000`
