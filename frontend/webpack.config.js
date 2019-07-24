@@ -48,7 +48,14 @@ module.exports = {
   devServer: {
     historyApiFallback: true,
     noInfo: true,
-    overlay: true
+    overlay: true,
+    proxy: { // 跨域
+        '/api/*': {//匹配根路径
+          target: 'http://192.168.188.45:5000',//跨域要访问的地址及端口
+          changeOrigin: true,
+          secure: false,
+        }
+      }
   },
   performance: {
     hints: false
