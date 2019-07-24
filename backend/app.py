@@ -1,20 +1,61 @@
+import random
+
 import click
 from backend import app, db
 from backend.models import Todo, TodoList
 from flask import jsonify, render_template, request
 
 
+# help funcs
+def get_default_data():
+    """
+    获取默认数据
+    :return: iterable
+    """
+    return [TodoList(text="Todo")]
+
+
+def get_forge_data():
+    """
+    获取虚拟数据
+    :return: iterable
+    """
+    data = []
+    # 生成虚拟测试数据
+    todo_list_items = [
+        TodoList(text="测试清单 %s" % i)
+        for i in range(1, random.randint(1, 6))
+    ]
+
+    for todo_list in todo_list_items:
+        todo_items = [
+            Todo(text="<%s> - 测试内容 %s" % (todo_list.text, i))
+            for i in range(1, random.randint(1, 11))
+        ]
+        todo_list.todo_items.extend(todo_items)
+
+        data.extend(todo_items)  # 添加清单内容测试数据
+    else:
+        data.extend(todo_list_items)  # 添加清单测试数据
+    return data
+
+
 # custom command
 @app.cli.command("init_db")
-@click.option("--drop", is_flag=True)
-def init_db(drop):
-    if drop is True:
-        click.confirm("This operation will delete the todo database, "
-                      "do you want to continue?", abort=True)
-        db.drop_all()
-        click.echo("Drop database success!")
-
+@click.option("--forge", is_flag=True)
+def init_db(forge):
+    db.drop_all()
     db.create_all()
+
+    default_data = get_default_data()
+    db.session.add_all(default_data)
+    if forge is True:
+        click.confirm("This operation will generate the todo forge data, "
+                      "do you want to continue?", abort=True)
+        forge_data = get_forge_data()
+        db.session.add_all(forge_data)
+    db.session.commit()
+
     click.echo("Initialized database success!")
 
 
