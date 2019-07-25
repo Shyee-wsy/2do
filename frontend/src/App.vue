@@ -2,12 +2,18 @@
   <div id="app">
     <div id="list">
       <ul>
-        <li>Todo</li>
-        <li v-for="(item, index) in lists" :key="item.id"><button class="deleteList" @click="deleteList(item.index)">X</button>{{ item.name }}</li>
-        <li><input placeholder="+ 新建清单" @keyup.13="newList(text)" v-model="text"></li>
+        {{listId}}
+        <li v-for="(item, index) in lists" :key="item.id" @click="getListId(item.id)">
+          <button  v-if="item.id !== 1" class="deleteList" @click="deleteList(item.index)">X</button>
+          {{ item.text }}
+        </li>
+
+        <li>
+          <input placeholder="+ 新建清单" @keyup.13="newList(text)" v-model="text">
+        </li>
       </ul>
     </div>
-    <Item></Item>
+    <Item :listId="listId"></Item>
   </div>
 </template>
 
@@ -22,14 +28,8 @@ export default {
   },
   data () {
     return {
-      lists:[
-        {id: 0, name: '计划'},
-        { id: 1, name: 'List1' },
-        { id: 2, name: 'List2' },
-        { id: 3, name: 'List3' },
-        { id: 4, name: '我的计划' }
-      ],
-      listName: true,
+      lists:[],
+      listId: 3,
       text: ''
     }
   },
@@ -41,12 +41,22 @@ export default {
       this.lists.push({id: 5, name: text});
       this.text='';
     },
+    getListId(id){
+      this.listId = id;
+    }
   },
   mounted(){
+    let data = [];
     axios
       .get('http://192.168.188.45:5000/get_todo')
-      .then(response => (console.log(response)))
-      .catch(error => console.log(error))
+      .then(response => {
+        data = response.data;
+        // console.log(data);
+        for(let i = 0; i < data.length; i++){
+          this.lists.push({id: data[i].id, text: data[i].text} )
+        }
+      })
+      .catch(error => console.log(error));
   }
 }
 </script>
@@ -58,6 +68,7 @@ export default {
   margin: 0 auto;
 }
 #list{
+  min-width: 220px;
   float: left;
   width: 20%;
   height: 100%;

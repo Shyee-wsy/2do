@@ -83,3 +83,11 @@ if (process.env.NODE_ENV === 'production') {
     })
   ])
 }
+
+
+// path_mapping = {
+// }
+//
+// function get_route (path) {
+//     return target + path
+// }
