@@ -29,18 +29,6 @@ export default {
       todoList: Array,
       listName: String
   },
-  // created(){ // 解决问题：父组件传递值过来的时候
-  //   this.getData()
-  // },
-  // watch:{
-  //     listId:{
-  //       handle(newValue, oldValue){
-  //           this.listId = newValue;
-  //       },
-  //       // immediate: true
-  //     }
-  // },
-
   methods: {
     new_todo(){
       axios
@@ -54,60 +42,18 @@ export default {
     },
     deleteTodo(id){
       axios
-        .delete('http://192.168.188.45:5000/delete_todo', {
-          id: id
-        })
+        .delete('http://192.168.188.45:5000/delete_todo/' + id)
         .then(resp => (console.log(resp)))
         .catch(error => console.log(error))
     },
-    // getData(){
-    //   axios
-    //     .get('http://192.168.188.45:5000/get_todo')
-    //     .then(response => {
-    //       let data = response.data;
-    //       for(let i = 0; i < data.length; i++){
-    //         if(data[i].id === this.listId){
-    //           this.listName = data[i].text;
-    //           let items = data[i].todo_items;
-    //           for(let j = 0; j < items.length; j++){
-    //             this.todoList.push({id: items[j].id, text: items[j].text, done: items[j].done})
-    //           }
-    //         }
-    //       }
-    //
-    //     })
-    //     .catch(error => console.log(error));
-    // },
     updateTodo(id, done){
-      axios.post('http://192.168.188.45:5000/update_todo',{
-        id: id,
+      axios.put('http://192.168.188.45:5000/update_todo/' + id, {
         done: done
-      })
+        })
         .then(resp => console.log(resp))
         .catch(error => console.log(error))
     }
   }
-  // mounted() {
-  //     axios
-  //       .get('http://192.168.188.45:5000/get_todo')
-  //       .then(response => {
-  //         let data = response.data;
-  //         console.log(data);
-  //         console.log(this.listId)
-  //         for(let i = 0; i < data.length; i++){
-  //           if(data[i].id === this.listId){
-  //             this.listName = data[i].text;
-  //             let items = data[i].todo_items;
-  //             for(let j = 0; j < items.length; j++){
-  //               this.todoList.push({id: items[j].id, text: items[j].text, done: items[j].done})
-  //               console.log(this.todoList);
-  //             }
-  //           }
-  //         }
-  //
-  //       })
-  //       .catch(error => console.log(error));
-  // }
 }
 </script>
 
