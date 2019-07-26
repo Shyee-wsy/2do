@@ -3,8 +3,8 @@
     <div id="list">
       <ul>
         {{listId}}
-        <li v-for="(item, index) in lists" :key="item.id" @click="getListId(item.id)">
-          <button  v-if="item.id !== 1" class="deleteList" @click="deleteList(item.index)">X</button>
+        <li v-for="item in lists" :key="item.id" @click="getListId(item.id)">
+          <button  v-if="item.id !== 1" class="deleteList" @click="deleteList(item.id)">X</button>
           {{ item.text }}
         </li>
 
@@ -13,7 +13,7 @@
         </li>
       </ul>
     </div>
-    <Item :listId="listId"></Item>
+    <Item :listId="listId" :todoList="todoList" :listName="listName"></Item>
   </div>
 </template>
 
@@ -30,15 +30,27 @@ export default {
     return {
       lists:[],
       listId: 3,
-      text: ''
+      text: '',
+      todoList: [],
+      listName: 'Todo'
     }
   },
   methods: {
-    deleteList:function(index){
-      this.lists.splice(index, 1);
+    deleteList(id){
+      axios
+        .delete('http://192.168.188.45:5000/delete_list',{
+          id: id
+        })
+        .then(response => console.log(response))
+        .catch(error => console.log(error))
     },
-    newList:function(text){
-      this.lists.push({id: 5, name: text});
+    newList(text){
+      axios
+        .post('http://192.168.188.45:5000/new_list',{
+          text: text
+        })
+        .then(response => (console.log(response)))
+        .catch(error => console.log(error))
       this.text='';
     },
     getListId(id){
@@ -51,9 +63,15 @@ export default {
       .get('http://192.168.188.45:5000/get_todo')
       .then(response => {
         data = response.data;
-        // console.log(data);
         for(let i = 0; i < data.length; i++){
           this.lists.push({id: data[i].id, text: data[i].text} )
+          if(data[i].id === this.listId){
+            this.listName = data[i].text;
+            let items = data[i].todo_items;
+            for(let j = 0; j < items.length; j++){
+              this.todoList.push({id: items[j].id, text: items[j].text, done: items[j].done})
+            }
+          }
         }
       })
       .catch(error => console.log(error));
@@ -68,9 +86,8 @@ export default {
   margin: 0 auto;
 }
 #list{
-  min-width: 220px;
   float: left;
-  width: 20%;
+  width: 25%;
   height: 100%;
   border-left: 1px solid #7e7e81;
   border-right: 1px solid #7e7e81;
