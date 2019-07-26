@@ -29,18 +29,24 @@ export default {
   data () {
     return {
       lists:[],
-      listId: 3,
+      listId: 1,
       text: '',
       todoList: [],
       listName: 'Todo'
     }
   },
+  // watch: {
+  //     listId: {
+  //       handle (newValue, oldValue) {
+  //         this.listId = newValue;
+  //       },
+  //       immediate: true
+  //     }
+  // },
   methods: {
     deleteList(id){
       axios
-        .delete('http://192.168.188.45:5000/delete_list',{
-          id: id
-        })
+        .delete('http://192.168.188.45:5000/delete_list/' + id)
         .then(response => console.log(response))
         .catch(error => console.log(error))
     },
@@ -55,26 +61,29 @@ export default {
     },
     getListId(id){
       this.listId = id;
+    },
+    getData(){
+      let data = [];
+      axios
+        .get('http://192.168.188.45:5000/get_todo')
+        .then(response => {
+          data = response.data;
+          for(let i = 0; i < data.length; i++){
+            this.lists.push({id: data[i].id, text: data[i].text} )
+            if(data[i].id === this.listId){
+              this.listName = data[i].text;
+              let items = data[i].todo_items;
+              for(let j = 0; j < items.length; j++){
+                this.todoList.push({id: items[j].id, text: items[j].text, done: items[j].done})
+              }
+            }
+          }
+        })
+        .catch(error => console.log(error));
     }
   },
   mounted(){
-    let data = [];
-    axios
-      .get('http://192.168.188.45:5000/get_todo')
-      .then(response => {
-        data = response.data;
-        for(let i = 0; i < data.length; i++){
-          this.lists.push({id: data[i].id, text: data[i].text} )
-          if(data[i].id === this.listId){
-            this.listName = data[i].text;
-            let items = data[i].todo_items;
-            for(let j = 0; j < items.length; j++){
-              this.todoList.push({id: items[j].id, text: items[j].text, done: items[j].done})
-            }
-          }
-        }
-      })
-      .catch(error => console.log(error));
+    this.getData();
   }
 }
 </script>
