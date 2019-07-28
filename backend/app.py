@@ -81,7 +81,7 @@ def get_todo():
         todo_list_json = todo_list.to_json(include_relationship=True)
         todo_list_id = str(todo_list_json.pop("id", "id_key_error"))
         todo_list_text = todo_list_json.pop("text", "text_key_error")
-        todo_items = todo_list_json.pop("todo_items", "text_key_error")
+        todo_items = todo_list_json.pop("todo_items", "todo_items_key_error")
 
         data["todo_list"].append({todo_list_id: todo_list_text})
         data[todo_list_id] = todo_items
