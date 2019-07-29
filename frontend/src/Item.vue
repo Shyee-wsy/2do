@@ -1,13 +1,12 @@
 <template>
   <div id="item">
-    {{listId}}
     <blockquote>{{listName}}</blockquote>
     <ul>
       <li>
         <input placeholder="接下来做什么？" autofocus="true" @keyup.13="new_todo()" v-model="inputText" class="new">
       </li>
 
-      <li v-for="item in todoList" :class="{finished: item.done}">
+      <li v-for="item in todoItems" :class="{finished: item.done}">
         <input type="checkbox" id="item.id" v-model="item.done" @change="updateTodo(item.id, item.done)">
         <label for="item.id"> {{item.text}}</label>
         <button class="deleteTodo" @click="deleteTodo(item.id)">X</button>
@@ -26,7 +25,7 @@ export default {
     },
   props:{
       listId: Number,
-      todoList: Array,
+      todoItems: Array,
       listName: String
   },
   methods: {
