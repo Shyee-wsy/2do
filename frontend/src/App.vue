@@ -2,7 +2,6 @@
   <div id="app">
     <div id="list">
       <ul>
-        {{listId}}
         <li v-for="item in lists" :key="item.id" @click="getListId(item.id)">
           <button  v-if="item.id !== 1" class="deleteList" @click="deleteList(item.id)">X</button>
           {{ item.text }}
@@ -13,7 +12,7 @@
         </li>
       </ul>
     </div>
-    <Item :listId="listId" :todoList="todoList" :listName="listName"></Item>
+    <Item :listId="listId" :todoItems="todoItems" :listName="listName"></Item>
   </div>
 </template>
 
@@ -29,20 +28,12 @@ export default {
   data () {
     return {
       lists:[],
-      listId: 1,
+      listId: 3,
       text: '',
-      todoList: [],
+      todoItems: [],
       listName: 'Todo'
     }
   },
-  // watch: {
-  //     listId: {
-  //       handle (newValue, oldValue) {
-  //         this.listId = newValue;
-  //       },
-  //       immediate: true
-  //     }
-  // },
   methods: {
     deleteList(id){
       axios
@@ -60,31 +51,22 @@ export default {
       this.text='';
     },
     getListId(id){
-      this.listId = id;
+      this.listId = Number(id);
     },
-    getData(){
-      let data = [];
-      axios
-        .get('http://192.168.188.45:5000/get_todo')
-        .then(response => {
-          data = response.data;
-          for(let i = 0; i < data.length; i++){
-            this.lists.push({id: data[i].id, text: data[i].text} )
-            if(data[i].id === this.listId){
-              this.listName = data[i].text;
-              let items = data[i].todo_items;
-              for(let j = 0; j < items.length; j++){
-                this.todoList.push({id: items[j].id, text: items[j].text, done: items[j].done})
-              }
-            }
-          }
-        })
-        .catch(error => console.log(error));
+    getData() {
+        this.$server.getData().then(data =>{
+                this.lists = data["todo_list"]
+                this.todoItems = data[this.listId];
+
+      })
     }
   },
   mounted(){
     this.getData();
-  }
+  },
+  // updated(){
+  //   this.getData();
+  // }
 }
 </script>
 
