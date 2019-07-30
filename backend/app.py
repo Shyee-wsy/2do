@@ -78,11 +78,12 @@ def get_todo():
         "todo_list": []
     }
     for todo_list in TodoList.query.order_by(TodoList.timestamp.asc()).all():
+        todo_list_id = str(todo_list.id)
         todo_list_json = todo_list.to_json(include_relationship=True)
         todo_items = todo_list_json.pop("todo_items", "todo_items_key_error")
 
         data["todo_list"].append(todo_list_json)
-        data[todo_list.id] = todo_items
+        data[todo_list_id] = todo_items
     return jsonify(data)
 
 
