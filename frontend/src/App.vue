@@ -28,7 +28,7 @@ export default {
   data () {
     return {
       lists:[],
-      listId: 3,
+      listId: 2,
       text: '',
       todoItems: [],
       listName: 'Todo'
@@ -54,11 +54,23 @@ export default {
       this.listId = Number(id);
     },
     getData() {
-        this.$server.getData().then(data =>{
-                this.lists = data["todo_list"]
-                this.todoItems = data[this.listId];
-
+      this.$server.getData().then(data =>{
+        console.log(data)
+              this.lists = data["todo_list"]
+              this.todoItems = data[this.listId];
       })
+      // let xhr = new XMLHttpRequest();
+      // xhr.open('get', 'http://192.168.188.45:5000/get_todo', false)
+      // xhr.send(null)
+      // if((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304){
+      //   console.log(xhr.responseText);
+      //   // let data = xhr.responseText;
+      //   // this.lists = data['todo_list'];
+      // }
+      // else{
+      //   console.log("request was unsuccessful: " + xhr.status);
+      // }
+
     }
   },
   mounted(){
