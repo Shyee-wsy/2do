@@ -1,23 +1,23 @@
 import axios from 'axios';
 
+//全局默认值
 axios.defaults.timeout = 5000;
 axios.defaults.baseURL ='http://192.168.188.45:5000'; //填写域名
 
-//http request 拦截器
+//添加请求拦截器
 axios.interceptors.request.use(
+  //在发送之前做些什么
   config => {
-    config.data = JSON.stringify(config.data);
-    config.headers = {
-      'Content-Type':'application/x-www-form-urlencoded'
-    }
+    // console.log(config)
     return config;
   },
+    //对错误请求做些什么
   error => {
-    return Promise.reject(err);
+    return Promise.reject(error);
   }
 );
 
-//响应拦截器即异常处理
+//添加响应拦截器（异常处理）
 axios.interceptors.response.use(response => {
   return response
 }, err => {
@@ -76,7 +76,7 @@ axios.interceptors.response.use(response => {
  * @returns {Promise}
  */
 
-export function fetch(url,params={}){
+export function get(url,params={}){
   return new Promise((resolve,reject) => {
     axios.get(url,{
       params:params
@@ -110,15 +110,15 @@ export function post(url,data = {}){
 }
 
 /**
- * 封装patch请求
+ * 封装delete请求
  * @param url
  * @param data
  * @returns {Promise}
  */
 
-export function patch(url,data = {}){
+export function del(url,id,param){
   return new Promise((resolve,reject) => {
-    axios.patch(url,data)
+    axios.delete(url + id, param)
       .then(response => {
         resolve(response.data);
       },err => {
@@ -152,13 +152,19 @@ export function put(url,data = {}){
  * 测试接口
  * 名称：exam
  * 参数：paramObj/null
- * 方式：fetch/post/patch/put
+ * 方式：fetch/post/delete/put
  */
 export const server = {
-  getData: function(paramObj){
-    return fetch('/get_todo',paramObj);
+  getData: function(param){
+    return get('/get_todo',param);
   },
-  newList:function(paramObj){
-    return post('./new_list',paramObj);
+  newList:function(param){
+    return post('./new_list',param);
+  },
+  newTodo:function(param){
+    return post('./new_todo', param)
+  },
+  updateTodo:function(param){
+    return put('./update_todo', param)
   }
 }
